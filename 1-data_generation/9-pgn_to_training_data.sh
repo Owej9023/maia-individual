@@ -17,10 +17,11 @@ mkdir -p ${split_dir}
 
 echo "${p_name} to ${p_dir}"
 
-python split_by_player.py $player_file $p_name $split_dir/games
+python3 split_by_player.py $player_file $p_name $split_dir/games
 
 for c in "white" "black"; do
-    python pgn_fractional_split.py $split_dir/games_$c.pgn.bz2 $split_dir/train_$c.pgn.bz2 $split_dir/validate_$c.pgn.bz2 --ratios $train_frac $val_frac
+    python3 pgn_fractional_split.py $split_dir/games_$c.pgn $split_dir/train_$c.pgn $split_dir/validate_$c.pgn --ratios $train_frac $val_frac
+
 
     cd $p_dir
     mkdir -p pgns
@@ -30,9 +31,9 @@ for c in "white" "black"; do
 
         #using tool from:
         #https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/
-        bzcat $split_dir/${s}_${c}.pgn.bz2 | pgn-extract -7 -C -N  -#1000
+        cat $split_dir/${s}_${c}.pgn | /mnt/c/Users/19258/Documents/GitHub/maia-individual/pgn-extract.exe -7 -C -N  -#1000
 
-        cat *.pgn > pgns/${s}_${c}.pgn
+        cat $split_dir/${s}_${c}.pgn > ./$p_dir/${s}_${c}.pgn
         rm -v *.pgn
 
         #using tool from:
@@ -41,3 +42,5 @@ for c in "white" "black"; do
     done
     cd -
 done
+
+

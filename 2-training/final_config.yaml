@@ -3,8 +3,8 @@
 gpu: 0
 
 dataset:
-    path: 'path to player data'
-    #name: ''
+    path: 'C:\Users\19258\Documents\GitHub\maia-individual\1-data_generation\output\split'
+    #name: 'owej9023'
 
 training:
     precision: 'half'
