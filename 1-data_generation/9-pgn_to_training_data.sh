@@ -22,25 +22,39 @@ python3 split_by_player.py $player_file $p_name $split_dir/games
 for c in "white" "black"; do
     python3 pgn_fractional_split.py $split_dir/games_$c.pgn $split_dir/train_$c.pgn $split_dir/validate_$c.pgn --ratios $train_frac $val_frac
 
-
     cd $p_dir
     mkdir -p pgns
     for s in "train" "validate"; do
         mkdir -p $s
         mkdir -p $s/$c
 
+        # Debugging Output
+        echo "Processing $s $c PGN file..."
+
         #using tool from:
         #https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/
-        cat $split_dir/${s}_${c}.pgn | /mnt/c/Users/19258/Documents/GitHub/maia-individual/pgn-extract.exe -7 -C -N  -#1000
+        cat $split_dir/${s}_${c}.pgn | /mnt/c/Users/19258/Documents/GitHub/maia-individual/pgn-extract.exe -7 -C -N  -#100
 
-        cat $split_dir/${s}_${c}.pgn > ./$p_dir/${s}_${c}.pgn
+        # Debugging Output
+        echo "Finished processing $s $c PGN file."
+
+        # Copy PGN file
+        cat "$split_dir/${s}_${c}.pgn" > "/mnt/c/Users/19258/Documents/GitHub/maia-individual/output/split/${s}_${c}.pgn"
         rm -v *.pgn
 
         #using tool from:
         #https://github.com/DanielUranga/trainingdata-tool
+
+        # Debugging Output
+        echo "Starting trainingdata-tool for $s $c..."
+
         screen -S "${p_name}-${c}-${s}" -dm bash -c "cd ${s}/${c}; trainingdata-tool -v ../../pgns/${s}_${c}.pgn"
+
+        # Debugging Output
+        echo "Finished trainingdata-tool for $s $c."
     done
     cd -
 done
+
 
 
